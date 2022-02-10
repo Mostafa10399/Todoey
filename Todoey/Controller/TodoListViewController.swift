@@ -69,11 +69,18 @@ class TodoListViewController: SwipeTableViewController {
         navigationItem.backButtonTitle = "Back"
         if let color = UIColor(hexString: selectedCategory?.colorName){
             searchBarIB.searchTextField.textColor = UIColor(contrastingBlackOrWhiteColorOn:color, isFlat:true)
+            
 
         }
+        let gestur = UITapGestureRecognizer(target: self, action: #selector (TabOnTitle))
+        navigationItem.titleView?.addGestureRecognizer(gestur)
        
      
        
+    }
+    @objc func TabOnTitle()
+    {
+        searchBarIB.resignFirstResponder()
     }
     
     
@@ -107,6 +114,7 @@ class TodoListViewController: SwipeTableViewController {
     }
     //MARK: -  Table View Delegate
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        searchBarIB.resignFirstResponder()
         if let item = itemArray?[indexPath.row]
         {
             do
@@ -127,7 +135,7 @@ class TodoListViewController: SwipeTableViewController {
     
     //MARK: - Add Button Pressed
     @IBAction func addButton(_ sender: UIBarButtonItem) {
-        
+        searchBarIB.resignFirstResponder()
         let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
         alert.addTextField { (alertTextField) in
             alertTextField.placeholder = "Create New Item"
@@ -186,7 +194,7 @@ class TodoListViewController: SwipeTableViewController {
     //MARK: - Load Items
     func loadItems()
     {
-        itemArray = selectedCategory?.items.sorted(byKeyPath: "createdDate", ascending: false)
+        itemArray = selectedCategory?.items.sorted(byKeyPath: "createdDate", ascending: true)
         tableView.reloadData()
 
 
@@ -236,6 +244,8 @@ extension TodoListViewController:UISearchBarDelegate
 
         }
     }
+    
+   
 
 }
 
